@@ -52,51 +52,87 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Please add package.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                runOnUiThread(new Runnable(){public void run(){
-                        AlertDialog.Builder ab=new AlertDialog.Builder(ctx);
-                        ab.setTitle("Type package name.");
-                        final EditText ed=   new EditText(ctx);
-                         ed.setWidth(LayoutParams.MATCH_PARENT);
-                        ab.setView(ed);
+                runOnUiThread(new Runnable(){
+                    public void run(){
+     //============================================================================================
+                        final ProgressDialog abd=new ProgressDialog(ctx);
                         
-                            ab.setNegativeButton("sure", new DialogInterface.OnClickListener(){
-
-                                    @Override
-                                    public void onClick(DialogInterface p1, int p2)
-                                    {
-                                        // TODO: Implement this method
-                                        String name=ed.getText().toString();
-                                        if(!("".equals(name))){
-                                        activity_list.add(name);
-                                        refreshSetting();}
-                                        else{
-                                            Snackbar.make(ed, "Please type package name worked.", Snackbar.LENGTH_LONG)
-                                                .setAction("Action", null).show();
+                        abd.setTitle("Waiting...");
+                        abd.create();
+                        abd.show();
+                        
+    //============================================================================================      
+    
+                        Thread th=new Thread(new Runnable(){
+                            public void run(){
+                                final AUtils.Apps apps=new AUtils.Apps(ctx);
+                                abd.dismiss();
+                                runOnUiThread(new Runnable(){
+                                    public void run(){
+                                        LinearLayout lly=new LinearLayout(ctx);
+                                        ScrollView scv=new ScrollView(ctx);
+                                        lly.setOrientation(1);
+                                        AlertDialog.Builder abbc=new AlertDialog.Builder(ctx);
+                                        final AlertDialog ab=abbc.create();
+                                        for(int i=0;i<apps.getAppsCount()-1;i++){
+                                            LinearLayout lcy=new LinearLayout(ctx);
+                                            lcy.setOrientation(0);
+                                            ImageView imgv=new ImageView(ctx);
+                                            imgv.setMaxHeight(140);
+                                            imgv.setMaxWidth(140);
+                                            TextView txtv=new TextView(ctx);
+                                            txtv.setHint(apps.packNameList.get(i));
+                                            txtv.setText(apps.labelList.get(i));
+                                            txtv.setGravity(Gravity.LEFT|Gravity.CENTER);
+                                            imgv.setImageDrawable(apps.iconList.get(i));
+                                            txtv.setHeight(140);
                                             
+                                            lcy.addView(imgv,140,140);
+                                            lcy.addView(txtv);
+                                            
+                                            txtv.setOnClickListener(new OnClickListener(){
+
+                                                    @Override
+                                                    public void onClick(View p1)
+                                                    {
+                                                        // TODO: Implement this method
+                                                        String name=((TextView)p1).getHint().toString();
+                                                        
+                                                        if(!("".equals(name))){
+                                                            activity_list.add(name);
+                                                            refreshSetting();
+                                                            }
+                                                        else{
+                                                            Snackbar.make(p1, "Please type package name worked.", Snackbar.LENGTH_LONG)
+                                                                .setAction("Action", null).show();
+                                                       }
+                                                        runOnUiThread(new Runnable(){
+
+                                                                @Override
+                                                                public void run()
+                                                                {
+                                                                    // TODO: Implement this method
+                                                                    ab.dismiss();
+                                                                }
+                                                            });
+                                                    }
+                                            });
+                                            lly.addView(lcy);
                                         }
+                                        
+                                        ab.setTitle("Choose an APP to start.");
+                                        scv.addView(lly);
+                                        scv.setPadding(5,10,5,10);
+                                        ab.setView(scv);
+                                        ab.show();
                                     }
                                 });
-                                ab.show();
-                          /*
-                          
-                          final MyDialog dg=new MyDialog(ctx,0,android.R.style.Theme_Material_Dialog);
-                            dg.setIL(new OnItemClickListener(){
+                            }                        
+                        });
+                        th.start();
 
-                                    @Override
-                                    public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4)
-                                    {
-                                        // TODO: Implement this method
-                                        PackageManager packageManager =ctx.getPackageManager(); 
-                                        String name = (dg.list).get(p3).getPackageName(); //获取包名
-                                        if(!("".equals(name))){
-                                            activity_list.add(name);
-                                            refreshSetting();}
-                                        else{
-                                            
-                                        }
-                                    }
-                          });
-                          */
+    //============================================================================================
+    
                        } });
             }
         });
