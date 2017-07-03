@@ -8,16 +8,16 @@ import android.widget.*;
 
 public class WakeActivityService extends Service
 {
-    SharedPreferences sp;
-    SharedPreferences.Editor spe;
-    Set<String> activity_list=new TreeSet<String>();
-    String[] al;
-    int block_time=1000;
-    int i=-1;
-    NotificationCompat.Builder builder;
-    Context ctx=this;
-    Handler h=null;
-    Runnable r;
+    private SharedPreferences sp;
+    private SharedPreferences.Editor spe;
+    private Set<String> activity_list=new TreeSet<String>();
+    private String[] al;
+    private int block_time=1000;
+    private int i=-1;
+    private NotificationCompat.Builder builder;
+    private final Context ctx=this;
+    private Handler h=null;
+    private Runnable r;
     @Override
     public IBinder onBind(Intent p1)
     {
@@ -103,7 +103,7 @@ public class WakeActivityService extends Service
     }
 
     @Override
-    public void onStart(Intent intent, int startId)
+    public int onStartCommand(Intent intent, int flags,int startId)
     {
         // TODO: Implement this method
         super.onStart(intent, startId);
@@ -113,6 +113,7 @@ public class WakeActivityService extends Service
             h.sendEmptyMessage(0);
             this.stopSelf();
         }
+        return flags;
     }
 
     @Override

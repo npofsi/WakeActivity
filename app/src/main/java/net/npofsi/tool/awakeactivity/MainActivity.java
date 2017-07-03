@@ -21,14 +21,14 @@ import android.text.method.*;
 import android.widget.AdapterView.*;
 import android.content.pm.*;
 public class MainActivity extends AppCompatActivity {
-    SharedPreferences sp;
-    SharedPreferences.Editor spe;
-    Set<String> activity_list;
-    Set<String> nuS=new TreeSet<String>();
+    private SharedPreferences sp;
+    private SharedPreferences.Editor spe;
+    private Set<String> activity_list;
+    private final Set<String> nuS=new TreeSet<String>();
     
-    int block_time;
-    EditText edt;
-    Context ctx=this;
+    private int block_time;
+    private EditText edt;
+    private final Context ctx=this;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +138,8 @@ public class MainActivity extends AppCompatActivity {
             
             LinearLayout lc=new LinearLayout(ctx);
             TextView ttv=new TextView(ctx);
-            ttv.setText("    Maker:万能的N/P硅-npofsi©2017.6.24\n感谢@xfy9326提供的技术支持\n    Tool:AIDE,ApkEditor,AS2AIDE\n    Email:npofsi@outlook.com\n");
+            ttv.setText("    Maker:万能的N/P硅-npofsi©2017.6.24\n    感谢@xfy9326提供的技术支持\n    Tool:AIDE,ApkEditor,AS2AIDE\n    Email:npofsi@outlook.com\n");
+            ttv.setLineSpacing(2,2);
             lc.addView(ttv);
             AlertDialog.Builder ab=new AlertDialog.Builder(ctx);
             ab.setTitle("About");
