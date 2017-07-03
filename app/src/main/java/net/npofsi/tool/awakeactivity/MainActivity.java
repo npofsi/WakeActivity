@@ -20,6 +20,7 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.text.method.*;
 import android.widget.AdapterView.*;
 import android.content.pm.*;
+import android.graphics.*;
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences sp;
     private SharedPreferences.Editor spe;
@@ -62,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
                         abd.show();
                         
     //============================================================================================      
-    
                         Thread th=new Thread(new Runnable(){
                             public void run(){
                                 final AUtils.Apps apps=new AUtils.Apps(ctx);
@@ -86,32 +86,21 @@ public class MainActivity extends AppCompatActivity {
                                             txtv.setGravity(Gravity.LEFT|Gravity.CENTER);
                                             imgv.setImageDrawable(apps.iconList.get(i));
                                             txtv.setHeight(140);
-                                            
                                             lcy.addView(imgv,140,140);
                                             lcy.addView(txtv);
-                                            
                                             txtv.setOnClickListener(new OnClickListener(){
-
                                                     @Override
                                                     public void onClick(View p1)
                                                     {
                                                         // TODO: Implement this method
                                                         String name=((TextView)p1).getHint().toString();
-                                                        
-                                                        if(!("".equals(name))){
                                                             activity_list.add(name);
                                                             refreshSetting();
-                                                            }
-                                                        else{
-                                                            Snackbar.make(p1, "Please type package name worked.", Snackbar.LENGTH_LONG)
-                                                                .setAction("Action", null).show();
-                                                       }
                                                         runOnUiThread(new Runnable(){
 
                                                                 @Override
                                                                 public void run()
                                                                 {
-                                                                    // TODO: Implement this method
                                                                     ab.dismiss();
                                                                 }
                                                             });
@@ -119,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
                                             });
                                             lly.addView(lcy);
                                         }
-                                        
                                         ab.setTitle("Choose an APP to start.");
                                         scv.addView(lly);
                                         scv.setPadding(5,10,5,10);
@@ -130,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
                             }                        
                         });
                         th.start();
-
     //============================================================================================
     
                        } });
@@ -174,7 +161,9 @@ public class MainActivity extends AppCompatActivity {
             
             LinearLayout lc=new LinearLayout(ctx);
             TextView ttv=new TextView(ctx);
-            ttv.setText("    Maker:万能的N/P硅-npofsi©2017.6.24\n    感谢@xfy9326提供的技术支持\n    Tool:AIDE,ApkEditor,AS2AIDE\n    Email:npofsi@outlook.com\n");
+            ttv.setLinksClickable(true);
+            ttv.setLinkTextColor(Color.parseColor("#bf360c"));
+            ttv.setText("    Maker:万能的N/P硅-npofsi©2017.6.24\n    感谢@xfy9326提供的技术支持\n    Tool:AIDE,ApkEditor,AS2AIDE\n    Github:github.com/npofsi/awakeactivity\n    Email:npofsi@outlook.com\n");
             ttv.setLineSpacing(2,2);
             lc.addView(ttv);
             AlertDialog.Builder ab=new AlertDialog.Builder(ctx);

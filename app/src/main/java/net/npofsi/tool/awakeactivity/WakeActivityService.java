@@ -103,17 +103,12 @@ public class WakeActivityService extends Service
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags,int startId)
+    public void onStart(Intent intent,int startId)
     {
         // TODO: Implement this method
         super.onStart(intent, startId);
-        if(h!=null){
-
-            h.removeCallbacks(r);
-            h.sendEmptyMessage(0);
-            this.stopSelf();
-        }
-        return flags;
+        
+        //return flags;
     }
 
     @Override
