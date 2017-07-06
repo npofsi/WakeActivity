@@ -33,7 +33,8 @@
 			android:id="@+id/block_time"
 			android:hint="Second to block waking.(ms)"
 			android:singleLine="true"
-			android:layout_weight="1.0"/>
+			android:layout_weight="1.0"
+			android:textIsSelectable="false"/>
 
 		<TextView
 			android:layout_height="match_parent"
@@ -41,12 +42,6 @@
 			android:layout_width="wrap_content"
 			android:text="ms"
 			android:gravity="bottom"/>
-
-		<ImageButton
-			android:layout_height="wrap_content"
-			android:layout_width="wrap_content"
-			android:src="@android:drawable/stat_notify_sdcard"
-			android:id="@+id/save"/>
 
 	</LinearLayout>
 
@@ -63,12 +58,20 @@
 
 	</ScrollView>
 
+	<CheckBox
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:text="仅执行一次"
+		android:id="@+id/isOnce"/>
+
 	<Button
 		style="?android:attr/buttonStyleSmall"
 		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:text="Start/Stop"
-		android:onClick="start"/>
+		android:layout_width="wrap_content"
+		android:text="    Start/Stop    "
+		android:onClick="start"
+		android:elevation="20dp"
+		android:ellipsize="start"/>
 
 </LinearLayout>
 

@@ -14,6 +14,7 @@ public class WakeActivityService extends Service
     private String[] al;
     private int block_time=1000;
     private int i=-1;
+    private Boolean isOnce=false;
     private NotificationCompat.Builder builder;
     private final Context ctx=this;
     private Handler h=null;
@@ -30,14 +31,14 @@ public class WakeActivityService extends Service
     {
         // TODO: Implement this method
         super.onCreate();
-        sp =ctx.getApplicationContext().getSharedPreferences("u",MODE_ENABLE_WRITE_AHEAD_LOGGING | MODE_WORLD_WRITEABLE | MODE_MULTI_PROCESS);
+        sp =ctx.getApplicationContext().getSharedPreferences("u",MODE_ENABLE_WRITE_AHEAD_LOGGING | MODE_MULTI_PROCESS);
         spe = sp.edit();
         
-        block_time=sp.getInt("block_time",1000);
+        block_time=sp.getInt("block_time",10000);
         activity_list=sp.getStringSet("activity_list",new TreeSet<String>());
         al=new String[activity_list.size()];
         activity_list.toArray(al);
-        
+        isOnce=sp.getBoolean("isOnce",false);
         i=-1;
         
         builder = new NotificationCompat.Builder(this);
@@ -81,7 +82,10 @@ public class WakeActivityService extends Service
                    
                
                     Intent intent =null;
-                        if(i>=al.length-1){i=-1;}
+                        if(i>=al.length-1){i=-1;
+                        if(isOnce){
+                            stop();
+                        }}
                         i++;
                     intent = ctx.getPackageManager().getLaunchIntentForPackage(al[i]);
                     
@@ -122,7 +126,10 @@ public class WakeActivityService extends Service
             h.sendEmptyMessage(0);
             this.stopSelf();
         }
+        
     }
-    
+    public void stop(){
+        this.stopSelf();
+    }
     
 }

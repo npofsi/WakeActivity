@@ -2642,7 +2642,7 @@ containing a value of this type.
         public static final int action_text=0x7f060087;
         public static final int actions=0x7f060095;
         public static final int activity_chooser_view_content=0x7f060042;
-        public static final int activity_list=0x7f060072;
+        public static final int activity_list=0x7f060071;
         public static final int add=0x7f060036;
         public static final int alertTitle=0x7f06004e;
         public static final int all=0x7f060024;
@@ -2696,6 +2696,7 @@ containing a value of this type.
         public static final int ifRoom=0x7f06003c;
         public static final int image=0x7f060044;
         public static final int info=0x7f060092;
+        public static final int isOnce=0x7f060072;
         public static final int item_touch_helper_previous_elevation=0x7f060002;
         public static final int largeLabel=0x7f060074;
         public static final int left=0x7f060019;
@@ -2724,7 +2725,6 @@ containing a value of this type.
         public static final int right=0x7f06001a;
         public static final int right_icon=0x7f060093;
         public static final int right_side=0x7f06008f;
-        public static final int save=0x7f060071;
         public static final int screen=0x7f06002a;
         public static final int scroll=0x7f060010;
         public static final int scrollIndicatorDown=0x7f060053;
@@ -2907,14 +2907,9 @@ containing a value of this type.
         public static final int Animation_AppCompat_DropDownUp=0x7f0800b6;
         public static final int Animation_Design_BottomSheetDialog=0x7f080002;
         /**  Base application theme. 
-<item name="android:windowBackground">@android:color/transparent</item>
-<item name="android:windowIsTranslucent">true</item>
          */
         public static final int AppTheme=0x7f080176;
         public static final int AppTheme_AppBarOverlay=0x7f080178;
-        /** <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowIsTranslucent">true</item>
-         */
         public static final int AppTheme_NoActionBar=0x7f080177;
         public static final int AppTheme_PopupOverlay=0x7f080179;
         public static final int Base_AlertDialog_AppCompat=0x7f0800b7;

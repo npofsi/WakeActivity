@@ -21,15 +21,18 @@ import android.text.method.*;
 import android.widget.AdapterView.*;
 import android.content.pm.*;
 import android.graphics.*;
+import android.widget.CompoundButton.*;
+
 public class MainActivity extends AppCompatActivity {
     private SharedPreferences sp;
     private SharedPreferences.Editor spe;
     private Set<String> activity_list;
+    private final Context ctx=this;
     private final Set<String> nuS=new TreeSet<String>();
-    
     private int block_time;
     private EditText edt;
-    private final Context ctx=this;
+    private CheckBox cbx;
+    private Boolean isOnce;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,15 +40,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        
-        sp = getSharedPreferences("u",MODE_ENABLE_WRITE_AHEAD_LOGGING | MODE_WORLD_WRITEABLE | MODE_MULTI_PROCESS);
+        final float dip = ctx.getResources().getDisplayMetrics().density;
+    
+        sp = getSharedPreferences("u",MODE_ENABLE_WRITE_AHEAD_LOGGING | MODE_MULTI_PROCESS);
         spe = sp.edit();
         activity_list=sp.getStringSet("activity_list",nuS);
         block_time=sp.getInt("block_time",10000);
-        
+        isOnce=sp.getBoolean("isOnce",false);
         edt=(EditText) findViewById(R.id.block_time);
         edt.setText(""+block_time);
-        
+        cbx=(CheckBox)findViewById(R.id.isOnce);
+        cbx.setChecked(isOnce);
         loadActivityList();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -53,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Please add package.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+                        
+                
                 runOnUiThread(new Runnable(){
                     public void run(){
      //============================================================================================
@@ -78,15 +85,15 @@ public class MainActivity extends AppCompatActivity {
                                             LinearLayout lcy=new LinearLayout(ctx);
                                             lcy.setOrientation(0);
                                             ImageView imgv=new ImageView(ctx);
-                                            imgv.setMaxHeight(140);
-                                            imgv.setMaxWidth(140);
+                                            imgv.setMaxHeight((int)Math.floor(140*dip));
+                                            imgv.setMaxWidth((int)Math.floor(140*dip));
                                             TextView txtv=new TextView(ctx);
                                             txtv.setHint(apps.packNameList.get(i));
                                             txtv.setText(apps.labelList.get(i));
                                             txtv.setGravity(Gravity.LEFT|Gravity.CENTER);
                                             imgv.setImageDrawable(apps.iconList.get(i));
-                                            txtv.setHeight(140);
-                                            lcy.addView(imgv,140,140);
+                                            txtv.setHeight((int)Math.floor(50*dip));
+                                            lcy.addView(imgv,(int)Math.floor(50*dip),(int)Math.floor(50*dip));
                                             lcy.addView(txtv);
                                             txtv.setOnClickListener(new OnClickListener(){
                                                     @Override
@@ -124,19 +131,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         
-        ((ImageButton)findViewById(R.id.save)).setOnClickListener(new OnClickListener(){
+        /*((ImageButton)findViewById(R.id.save)).setOnClickListener(new OnClickListener(){
 
                 @Override
                 public void onClick(View p1)
                 {
                     // TODO: Implement this method
                     {
-                        block_time=new Integer((edt).getText().toString());
-                        refreshSetting();
-                        Snackbar.make(p1, "Setting is saved.", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+                        
                         
                     }
+                }
+            });*/
+        cbx.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+                @Override
+                public void onCheckedChanged(CompoundButton p1, boolean p2)
+                {
+                    // TODO: Implement this method
+                    isOnce=p2;
+                    refreshSetting();
                 }
             });
     }
@@ -191,10 +204,12 @@ public class MainActivity extends AppCompatActivity {
     public void refreshSetting(){
         spe.clear();
         spe.putInt("block_time",block_time);  
+        spe.putBoolean("isOnce",isOnce);
         //spe.commit();
         spe.putStringSet("activity_list",activity_list);
         spe.commit();
         edt.setText(""+block_time);
+        cbx.setChecked(isOnce);
         loadActivityList();
     }
     
@@ -266,7 +281,10 @@ public class MainActivity extends AppCompatActivity {
                     .setAction("Action", null).show();
             }
         }catch(Exception err){}
-        
+        block_time=new Integer((edt).getText().toString());
+        refreshSetting();
+        Snackbar.make(v, "Setting is saved.", Snackbar.LENGTH_LONG)
+            .setAction("Action", null).show();
         
     }
     public static boolean isServiceRunning(Context context,String serviceName){
