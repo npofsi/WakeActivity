@@ -2,8 +2,8 @@
 <manifest
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	package="net.npofsi.tool.awakeactivity"
-	android:versionCode="7"
-	android:versionName="2.5">
+	android:versionCode="8"
+	android:versionName="3.0">
 
 	<uses-sdk
 		android:minSdkVersion="20"
@@ -54,7 +54,9 @@
 		</activity>
 
 		<service
-			android:name=".WakeActivityService">
+			android:name=".WakeActivityService"
+			android:label="WakeActivityService"
+			android:exported="true">
 
 		</service>
 

@@ -11,7 +11,9 @@ public class WakeActivityService extends Service
     private SharedPreferences sp;
     private SharedPreferences.Editor spe;
     private Set<String> activity_list=new TreeSet<String>();
+	private Set<String> package_list=new TreeSet<String>();
     private String[] al;
+	private String[] pl;
     private int block_time=1000;
     private int i=-1;
     private Boolean isOnce=false;
@@ -19,6 +21,7 @@ public class WakeActivityService extends Service
     private final Context ctx=this;
     private Handler h=null;
     private Runnable r;
+	private Service ctxs=this;
     @Override
     public IBinder onBind(Intent p1)
     {
@@ -30,14 +33,19 @@ public class WakeActivityService extends Service
     public void onCreate()
     {
         // TODO: Implement this method
+		
         super.onCreate();
+		
         sp =ctx.getApplicationContext().getSharedPreferences("u",MODE_ENABLE_WRITE_AHEAD_LOGGING | MODE_MULTI_PROCESS);
         spe = sp.edit();
         
         block_time=sp.getInt("block_time",10000);
         activity_list=sp.getStringSet("activity_list",new TreeSet<String>());
+		package_list=sp.getStringSet("package_list",new TreeSet<String>());
         al=new String[activity_list.size()];
         activity_list.toArray(al);
+		pl=new String[package_list.size()];
+		package_list.toArray(pl);
         isOnce=sp.getBoolean("isOnce",false);
         i=-1;
         
@@ -81,16 +89,24 @@ public class WakeActivityService extends Service
                     if(al.length!=0){
                    
                
-                    Intent intent =null;
+                    //Intent intent =null;
                         if(i>=al.length-1){i=-1;
                         if(isOnce){
                             stop();
                         }}
                         i++;
-                    intent = ctx.getPackageManager().getLaunchIntentForPackage(al[i]);
+                    final Intent intent = new Intent();
                     
                     if(intent != null){
-                        ctx.startActivity(intent);
+                        
+						ComponentName cn=new ComponentName(al[i].split(":")[0],
+														   al[i].split(":")[1]);  
+						intent.setComponent(cn);
+						//getPackageManager().;
+						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						
+						try{ctx.startActivity(intent);}catch(Exception err){print(al[i].split(":")[1]+" 不允许访问，请从列表中移除.");ctxs.stopSelf();}
+						try{ctx.startService(intent);}catch(Exception err){print(al[i].split(":")[1]+" 不允许访问，请从列表中移除.");ctxs.stopSelf();}
                     }
                 
                     runx();
@@ -131,5 +147,7 @@ public class WakeActivityService extends Service
     public void stop(){
         this.stopSelf();
     }
-    
+    public void print(String str){
+		Toast.makeText(ctx,str,Toast.LENGTH_LONG).show();
+	}
 }

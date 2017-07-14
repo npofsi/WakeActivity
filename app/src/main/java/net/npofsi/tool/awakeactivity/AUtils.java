@@ -44,4 +44,5 @@ public class AUtils
             return appList.size();
         }
     }
+	
 }
