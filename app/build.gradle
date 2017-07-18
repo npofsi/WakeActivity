@@ -7,8 +7,8 @@ android {
         applicationId "net.npofsi.tool.awakeactivity"
         minSdkVersion 20
         targetSdkVersion 25
-        versionCode 100000
-        versionName "3.2"
+        versionCode 100001
+        versionName "3.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
