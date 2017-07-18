@@ -1,4 +1,17 @@
 <resources>
     <string name="app_name">轮流唤醒</string>
     <string name="action_about">About</string>
+	<string name="action_start">Task started...</string>
+	<string name="action_stop">Task stopped...</string>
+	<string name="admin_hint">=Activity=</string>
+	<string name="title_choose_app">Choose an APP to start.</string>
+	<string name="title_choose_component">Choose a component to start.</string>
+	<string name="title_system_app">This app is a system application.</string>
+	<string name="title_wait">Waiting...</string>
+	<string name="title_about">About</string>
+	<string name="title_service_running">WakeActivity running...</string>
+	<string name="part_stop_service">点击以停止唤醒.</string>
+	<string name="part_about">    \tMaker:万能的N/P硅-npofsi©2017.6.24\n    \t感谢@xfy9326提供的技术支持\n    \tTool:AIDE,ApkEditor,AS2AIDE\n    \tGithub:github.com/npofsi/awakeactivity\n    \tEmail:npofsi@outlook.com\n   </string>
+	<string name="action_add_package">This app is a system application.</string>
+	<string name="no_text">输入框不能为空</string>
 </resources>

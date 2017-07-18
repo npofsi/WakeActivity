@@ -2697,7 +2697,6 @@ containing a value of this type.
         public static final int ifRoom=0x7f06003c;
         public static final int image=0x7f060044;
         public static final int info=0x7f060093;
-        public static final int isOnce=0x7f060073;
         public static final int item_touch_helper_previous_elevation=0x7f060002;
         public static final int largeLabel=0x7f060075;
         public static final int left=0x7f060019;
@@ -2766,6 +2765,7 @@ containing a value of this type.
         public static final int textSpacerNoButtons=0x7f060052;
         public static final int text_input_password_toggle=0x7f06007f;
         public static final int time=0x7f060091;
+        public static final int times=0x7f060073;
         public static final int title=0x7f060048;
         public static final int title_template=0x7f06004d;
         public static final int toolbar=0x7f060084;
@@ -2895,12 +2895,25 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f0b0014;
         public static final int abc_toolbar_collapse_description=0x7f0b0015;
         public static final int action_about=0x7f0b0025;
+        public static final int action_add_package=0x7f0b0031;
+        public static final int action_start=0x7f0b0026;
+        public static final int action_stop=0x7f0b0027;
+        public static final int admin_hint=0x7f0b0028;
         public static final int app_name=0x7f0b0024;
         public static final int appbar_scrolling_view_behavior=0x7f0b0000;
         public static final int bottom_sheet_behavior=0x7f0b0001;
         public static final int character_counter_pattern=0x7f0b0002;
+        public static final int no_text=0x7f0b0032;
+        public static final int part_about=0x7f0b0030;
+        public static final int part_stop_service=0x7f0b002f;
         public static final int search_menu_title=0x7f0b0016;
         public static final int status_bar_notification_info_overflow=0x7f0b0017;
+        public static final int title_about=0x7f0b002d;
+        public static final int title_choose_app=0x7f0b0029;
+        public static final int title_choose_component=0x7f0b002a;
+        public static final int title_service_running=0x7f0b002e;
+        public static final int title_system_app=0x7f0b002b;
+        public static final int title_wait=0x7f0b002c;
     }
     public static final class style {
         public static final int AlertDialog_AppCompat=0x7f0800b3;

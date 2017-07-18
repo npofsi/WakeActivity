@@ -58,20 +58,35 @@
 
 	</ScrollView>
 
-	<CheckBox
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:text="仅执行一次"
-		android:id="@+id/isOnce"/>
-
-	<Button
-		style="?android:attr/buttonStyleSmall"
+	<LinearLayout
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:text="    Start/Stop    "
-		android:onClick="start"
-		android:elevation="20dp"
-		android:ellipsize="start"/>
+		android:orientation="horizontal">
+
+		<Button
+			style="?android:attr/buttonStyleSmall"
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:text="    Start/Stop    "
+			android:onClick="start"
+			android:elevation="20dp"
+			android:ellipsize="start"/>
+
+		<TextView
+			android:layout_height="match_parent"
+			android:layout_width="wrap_content"
+			android:text="×"
+			android:gravity="center"/>
+
+		<EditText
+			android:layout_height="match_parent"
+			android:inputType="number|numberSigned"
+			android:layout_width="wrap_content"
+			android:ems="2"
+			android:id="@+id/times"
+			android:gravity="center"/>
+
+	</LinearLayout>
 
 </LinearLayout>
 

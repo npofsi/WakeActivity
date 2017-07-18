@@ -12,6 +12,10 @@ public class AUtils
         context.startActivity(intent);
         return intent;
     }
+	public static String getComponentFileName(CharSequence namec){
+		String[] str=namec.toString().split("\\u002E");
+		return str[str.length-1];
+	}
     public static class Apps{
         public static Context mctx;
         public static PackageManager mPackageManager;

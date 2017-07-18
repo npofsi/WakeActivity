@@ -33,12 +33,11 @@ public class MainActivity extends AppCompatActivity {
     private final Context ctx=this;
     private final Set<String> nuS=new TreeSet<String>();
     private int block_time;
-    private EditText edt;
-    private CheckBox cbx;
-    private Boolean isOnce;
+    private EditText edt,edc;
     private ActivityInfo[] activities;
 	private ServiceInfo[] services;
 	private float dip=2;
+	private int times=-1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,17 +51,17 @@ public class MainActivity extends AppCompatActivity {
         activity_list=sp.getStringSet("activity_list",nuS);
 		package_list=sp.getStringSet("package_list",nuS);
         block_time=sp.getInt("block_time",10000);
-        isOnce=sp.getBoolean("isOnce",false);
         edt=(EditText) findViewById(R.id.block_time);
         edt.setText(""+block_time);
-        cbx=(CheckBox)findViewById(R.id.isOnce);
-        cbx.setChecked(isOnce);
+		times=sp.getInt("times",-1);
+		edc=(EditText) findViewById(R.id.times);
+		edc.setText(""+times);
         loadActivityList();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Please add package.", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, getText(R.string.action_add_package), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
                         
                 
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
      //============================================================================================
                         final ProgressDialog abd=new ProgressDialog(ctx);
                         
-                        abd.setTitle("Waiting...");
+                        abd.setTitle(R.string.title_wait);
                         abd.create();
                         abd.show();
                         
@@ -130,21 +129,49 @@ public class MainActivity extends AppCompatActivity {
 																				catch (PackageManager.NameNotFoundException e)
 																				{}
 																		runOnUiThread(new Runnable(){public void run(){				
-																		try{
+																		//try{
 																		AlertDialog.Builder cbbc=new AlertDialog.Builder(ctx);
 																		final AlertDialog cb=cbbc.create();
 																		LinearLayout lcb=new LinearLayout(ctx);
 																		ScrollView scb=new ScrollView(ctx);
 																		scb.addView(lcb);
-																		cb.setTitle("Choose a component to start.");
+																		cb.setTitle(R.string.title_choose_component);
 																		lcb.setPadding(5,5,5,5);
 																		
 																		lcb.setOrientation(1);
 																		cb.setView(scb);
 																			if(activities==null||services==null){
 																				cb.setView(new TextView(ctx));
-																				cb.setTitle("This app is a system application.");
+																				cb.setTitle(R.string.title_system_app);
 																			}else{
+																				
+																				LinearLayout lcyg=new LinearLayout(ctx);
+																				lcyg.setOrientation(0);
+																				ImageView imgvg=new ImageView(ctx);
+																				imgvg.setMaxHeight((int)Math.floor(140*dip));
+																				imgvg.setMaxWidth((int)Math.floor(140*dip));
+																				TextView txtvg=new TextView(ctx);
+																				txtvg.setHint(";launch:"+name);
+																				txtvg.setText("启动项:"+name);
+																				txtvg.setGravity(Gravity.LEFT|Gravity.CENTER);
+																				try{imgvg.setImageDrawable(apps.mPackageManager.getApplicationIcon(name));}catch(Exception err){}
+																				txtvg.setHeight((int)Math.floor(50*dip));
+																				lcyg.addView(imgvg,(int)Math.floor(50*dip),(int)Math.floor(50*dip));
+																				lcyg.addView(txtvg);
+																				lcyg.setPadding(5,0,5,0);
+																				txtvg.setOnClickListener(new View.OnClickListener(){
+
+																						@Override
+																						public void onClick(View p1)
+																						{
+																							// TODO: Implement this method
+																							cb.dismiss();
+																							activity_list.add(";launch:"+name);
+																							refreshSetting();
+																						}
+																					});
+																				lcb.addView(lcyg);
+																				
 																		TextView tttx=new TextView(ctx);
 																		tttx.setText("Activity:");
 																		tttx.setPadding(15,15,0,0);
@@ -158,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
 																			imgv.setMaxWidth((int)Math.floor(140*dip));
 																			TextView txtv=new TextView(ctx);
 																			txtv.setHint(activities[i].name);
-																			txtv.setText(activities[i].loadLabel(ctx.getPackageManager()));
+																			txtv.setText(activities[i].loadLabel(ctx.getPackageManager())+"."+AUtils.getComponentFileName(activities[i].name));
 																			txtv.setGravity(Gravity.LEFT|Gravity.CENTER);
 																			try{imgv.setImageDrawable(activities[i].loadIcon(ctx.getPackageManager()));}catch(Exception err){}
 																			txtv.setHeight((int)Math.floor(50*dip));
@@ -217,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
 																		
 																		}
 																		cb.show();
-																		}catch(Exception err){ Toast.makeText(ctx,name+err.toString(),Toast.LENGTH_LONG).show();}
+																		//}catch(Exception err){ Toast.makeText(ctx,name+err.toString(),Toast.LENGTH_LONG).show();}
 																		}});
 																		
 																			}});
@@ -231,7 +258,7 @@ public class MainActivity extends AppCompatActivity {
                                             });
                                             lly.addView(lcy);
                                         }
-                                        ab.setTitle("Choose an APP to start.");
+                                        ab.setTitle(R.string.title_choose_app);
                                         scv.addView(lly);
                                         scv.setPadding(5,10,5,10);
                                         ab.setView(scv);
@@ -247,27 +274,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         
-        /*((ImageButton)findViewById(R.id.save)).setOnClickListener(new OnClickListener(){
-
-                @Override
-                public void onClick(View p1)
-                {
-                    // TODO: Implement this method
-                    {
-                        
-                        
-                    }
-                }
-            });*/
-        cbx.setOnCheckedChangeListener(new OnCheckedChangeListener(){
-                @Override
-                public void onCheckedChanged(CompoundButton p1, boolean p2)
-                {
-                    // TODO: Implement this method
-                    isOnce=p2;
-                    refreshSetting();
-                }
-            });
+        
     }
 
     @Override
@@ -290,13 +297,14 @@ public class MainActivity extends AppCompatActivity {
             
             LinearLayout lc=new LinearLayout(ctx);
             TextView ttv=new TextView(ctx);
+			ttv.setPadding(15,15,0,0);
             ttv.setLinksClickable(true);
             ttv.setLinkTextColor(Color.parseColor("#bf360c"));
-            ttv.setText("    Maker:万能的N/P硅-npofsi©2017.6.24\n    感谢@xfy9326提供的技术支持\n    Tool:AIDE,ApkEditor,AS2AIDE\n    Github:github.com/npofsi/awakeactivity\n    Email:npofsi@outlook.com\n");
+            ttv.setText(R.string.part_about);
             ttv.setLineSpacing(2,2);
             lc.addView(ttv);
             AlertDialog.Builder ab=new AlertDialog.Builder(ctx);
-            ab.setTitle("About");
+            ab.setTitle(R.string.title_about);
             ab.setView(lc);
             ab.setNegativeButton("ok", new DialogInterface.OnClickListener(){
 
@@ -320,13 +328,13 @@ public class MainActivity extends AppCompatActivity {
     public void refreshSetting(){
         spe.clear();
         spe.putInt("block_time",block_time);  
-        spe.putBoolean("isOnce",isOnce);
+		spe.putInt("times",times);
 		spe.putStringSet("package_list",package_list);
         //spe.commit();
         spe.putStringSet("activity_list",activity_list);
         spe.commit();
         edt.setText(""+block_time);
-        cbx.setChecked(isOnce);
+		edc.setText(""+times);
         loadActivityList();
     }
     
@@ -341,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
             lla[c]=ll;
             
             final TextView txv=new TextView(ctx);
-            txv.setHint("=Activity=");
+            txv.setHint(getText(R.string.admin_hint));
             txv.setGravity(Gravity.RIGHT|Gravity.CENTER);
             txv.setText(i.split(":")[1]);
 			txv.setHint(i);
@@ -391,18 +399,20 @@ public class MainActivity extends AppCompatActivity {
             if(isServiceRunning(ctx,"net.npofsi.tool.awakeactivity.WakeActivityService")){      
                 stopService(intent);
                 
-                Snackbar.make(v, "Stopped...", Snackbar.LENGTH_LONG)
+                Snackbar.make(v, getText(R.string.action_stop), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             }else{
                 startService(intent);
-                Snackbar.make(v, "Started...", Snackbar.LENGTH_LONG)
+                Snackbar.make(v, getText(R.string.action_start), Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();
             }
+			block_time=new Integer((edt).getText().toString());
+			times=new Integer(edc.getText().toString());
         }catch(Exception err){}
-        block_time=new Integer((edt).getText().toString());
+		
+        
         refreshSetting();
-        Snackbar.make(v, "Setting is saved.", Snackbar.LENGTH_LONG)
-            .setAction("Action", null).show();
+        //Snackbar.make(v, ".", Snackbar.LENGTH).setAction("Action", null).show();
         
     }
     public static boolean isServiceRunning(Context context,String serviceName){
@@ -428,7 +438,9 @@ public class MainActivity extends AppCompatActivity {
         
     }
 
-   
+   public void noText(){
+	   Toast.makeText(ctx,R.string.no_text,Toast.LENGTH_LONG).show();
+   }
 
     
 }

@@ -16,12 +16,13 @@ public class WakeActivityService extends Service
 	private String[] pl;
     private int block_time=1000;
     private int i=-1;
-    private Boolean isOnce=false;
     private NotificationCompat.Builder builder;
     private final Context ctx=this;
     private Handler h=null;
     private Runnable r;
 	private Service ctxs=this;
+	private int times=-1;
+	private int cti=1;
     @Override
     public IBinder onBind(Intent p1)
     {
@@ -46,13 +47,13 @@ public class WakeActivityService extends Service
         activity_list.toArray(al);
 		pl=new String[package_list.size()];
 		package_list.toArray(pl);
-        isOnce=sp.getBoolean("isOnce",false);
+		times=sp.getInt("times",-1);
         i=-1;
         
         builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.mipmap.ic_launcher);
-        builder.setContentTitle("WakeActivity running...");
-        builder.setContentText("点击以停止唤醒.");
+        builder.setContentTitle(getText(R.string.title_service_running));
+        builder.setContentText(getText(R.string.part_stop_service));
         Intent intent = new Intent(this,StopServiceActivity.class/* MainActivity.class*/);
         PendingIntent pendingIntent = PendingIntent.getActivity
         (this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -90,24 +91,33 @@ public class WakeActivityService extends Service
                    
                
                     //Intent intent =null;
-                        if(i>=al.length-1){i=-1;
-                        if(isOnce){
-                            stop();
-                        }}
+                        if(i>=al.length-1){
+							i=-1;
+							if(times<=-1){cti++;if(cti>=times){stopSelf();}}
+						}
                         i++;
                     final Intent intent = new Intent();
                     
-                    if(intent != null){
+                    
                         
-						ComponentName cn=new ComponentName(al[i].split(":")[0],
-														   al[i].split(":")[1]);  
-						intent.setComponent(cn);
-						//getPackageManager().;
-						intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-						
-						try{ctx.startActivity(intent);}catch(Exception err){print(al[i].split(":")[1]+" 不允许访问，请从列表中移除.");ctxs.stopSelf();}
-						try{ctx.startService(intent);}catch(Exception err){print(al[i].split(":")[1]+" 不允许访问，请从列表中移除.");ctxs.stopSelf();}
-                    }
+						if(al[i].charAt(0)!=';'){
+							
+							ComponentName cn=new ComponentName(al[i].split("\u003A")[0],
+															   al[i].split("\u003A")[1]);  
+							intent.setComponent(cn);
+							//getPackageManager().;
+							intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+							try{ctx.startActivity(intent);}catch(Exception err){print(al[i].split("\\u003A")[1]+" 不允许访问，请从列表中移除.");ctxs.stopSelf();}
+							try{ctx.startService(intent);}catch(Exception err){print(al[i].split("\\u003A")[1]+" 不允许访问，请从列表中移除.");ctxs.stopSelf();}
+						}else{
+							if(true){
+								
+								Intent intentc=ctx.getPackageManager().getLaunchIntentForPackage(al[i].split("\\u003A")[1]);
+								startActivity(intentc);
+							}
+						}
+					
                 
                     runx();
                     
