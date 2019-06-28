@@ -1,2 +1,2 @@
-# awakeactivity
-An application to start a service to start other apps
+# WakeActivity
+An android application to start a service to start other apps
